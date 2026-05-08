@@ -1,0 +1,36 @@
+name: CI Pipeline
+
+# Trigger workflow khi push lên nhánh main hoặc tạo Pull Request vào main
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    name: Build and Run Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Clone code từ repository về môi trường chạy của GitHub
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 2. Cài đặt môi trường Go
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.22' # Bạn có thể đổi phiên bản Go đang dùng ở local
+
+    # 3. Tải các dependencies (hiện tại chưa có nhiều)
+    - name: Install dependencies
+      run: go mod download
+
+    # 4. Chạy Unit Test
+    - name: Run Unit Tests
+      run: go test -v ./...
+
+    # 5. Thử build ứng dụng để đảm bảo code không bị lỗi compile
+    - name: Build Application
+      run: go build -o main ./cmd/api
