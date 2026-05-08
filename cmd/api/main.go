@@ -1,5 +1,4 @@
-// cmd/api/main.go
-package api
+package main
 
 import (
 	"fmt"
